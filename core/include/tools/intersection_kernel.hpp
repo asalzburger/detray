@@ -189,8 +189,7 @@ namespace detray
               const transform_container &contextual_transforms,
               const mask_container &masks)
     {
-        // Retrieve the (potentially) contextual transform
-        const auto &ctf = contextual_transforms.contextual_transform(track.ctx, surface.transform());
+        const auto &ctf = contextual_transforms[surface.transform()];
         auto mask_link = surface.mask();
         const auto &mask_context = std::get<0>(mask_link);
         const auto &mask_range = std::get<1>(mask_link);

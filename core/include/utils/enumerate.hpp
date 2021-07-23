@@ -95,7 +95,7 @@ namespace detray
      * Usage:
      * for (auto i : sequence(r)) {}
      * 
-     * with r an range that can be accessed with r[0] and r[1]
+     * with r a range that can be accessed with r[0] and r[1]
      * 
      * @note sequence({2,4}) will produce { 2, 3, 4 }
      * 
@@ -128,6 +128,35 @@ namespace detray
             auto end() { return iterator{_iterable[1] + 1, _iterable[1] + 1}; }
         };
         return iterable_wrapper{std::forward<array_type>(iterable)};
+    }
+
+    /** Helper method to run over a range 
+     * 
+     * Usage:
+     * for (auto value : range(container, r)) {}
+     * 
+     * with r a range that can be accessed with r[0] and r[1]
+     *
+     * @note Convenience type: no range checks!
+     **/
+    template <typename container_type,
+              typename container_type_iter = decltype(std::begin(std::declval<container_type>())),
+              typename = decltype(std::end(std::declval<container_type>())),
+              typename array_type,
+              typename = std::enable_if_t<std::conditional_t<std::is_array_v<array_type>, std::extent<array_type>, std::tuple_size<array_type>>::value == 2U>>
+    constexpr auto range_iter(const container_type &iterable, array_type &&range)
+    {
+        struct iterable_wrapper
+        {
+            const container_type &_iterable;
+            array_type _range;
+
+            inline auto begin() const {return _iterable.begin() + _range[0]; } 
+
+            inline auto end() const { return _iterable.begin() + _range[1]; }
+        };
+
+        return iterable_wrapper{iterable, range};
     }
 
 } // namespace detray

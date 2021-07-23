@@ -8,7 +8,10 @@
 #include "core/transform_store.hpp"
 
 #include <gtest/gtest.h>
+#include <vecmem/containers/vector.hpp>
 
+template<typename T>
+using vecmem_vector = vecmem::vector<T>;
 /// @note __plugin has to be defined with a preprocessor command
 
 // This tests the construction of a static transform store
@@ -17,9 +20,9 @@ TEST(ALGEBRA_PLUGIN, static_transform_store)
     using namespace detray;
     using namespace __plugin;
 
-    static_transform_store<> static_store;   
-    static_transform_store<>::context ctx0;
-    static_transform_store<>::context ctx1;
+    static_transform_store<vecmem_vector> static_store;   
+    static_transform_store<vecmem_vector>::context ctx0;
+    static_transform_store<vecmem_vector>::context ctx1;
 
     ASSERT_TRUE(static_store.empty(ctx0));
 

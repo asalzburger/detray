@@ -6,15 +6,15 @@
  */
 #pragma once
 
-#include <cmath>
-#include <climits>
-#include <optional>
-
 #include "core/intersection.hpp"
 #include "core/surface_base.hpp"
 #include "core/track.hpp"
 #include "masks/unmasked.hpp"
 #include "utils/unbound.hpp"
+
+#include <cmath>
+#include <climits>
+#include <optional>
 
 namespace detray
 {

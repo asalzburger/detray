@@ -48,7 +48,7 @@ TEST(ALGEBRA_PLUGIN, detector)
 
     detector d("test_detector");
     auto &v = d.new_volume("test_volume", {0., 10., -5., 5., -M_PI, M_PI});
-    v.add_surface_transforms(ctx0, std::move(static_storage));
+    d.add_surface_transforms(ctx0, v, std::move(static_storage));
 }
 
 int main(int argc, char **argv)

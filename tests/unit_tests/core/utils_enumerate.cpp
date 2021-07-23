@@ -59,6 +59,21 @@ TEST(utils, enumerate)
     }
 }
 
+// This tests the restricted iterator
+TEST(utils, range)
+{
+    size_t begin = 1;
+    size_t end = 4;
+
+    dvector<int> seq = {0,1,2,3,4,5};
+
+    size_t i = 1;
+    for (const auto &v : range_iter(seq, std::array<size_t, 2>{begin, end}))
+    {
+        ASSERT_EQ(v, seq[i++]);
+    }
+}
+
 int main(int argc, char **argv)
 {
     ::testing::InitGoogleTest(&argc, argv);

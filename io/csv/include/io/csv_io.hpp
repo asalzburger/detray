@@ -16,7 +16,6 @@
 #include "io/csv_io_types.hpp"
 #include "tools/bin_association.hpp"
 
-#include <iostream>
 #include <climits>
 #include <map>
 #include <vector>
@@ -43,7 +42,7 @@ namespace detray
   template <template <typename, unsigned int> class array_type = darray,
             template <typename...> class tuple_type = dtuple,
             template <typename> class vector_type = dvector,
-            typename alignable_store = static_transform_store<vector_type>,
+            typename alignable_store = static_transform_store<vecm_vector>,
             typename surface_source_link = dindex,
             typename bounds_source_link = dindex>
   detector<array_type,
@@ -60,7 +59,6 @@ namespace detray
                     scalar r_sync_tolerance = 0.,
                     scalar z_sync_tolerance = 0.)
   {
-
     using typed_detector = detector<array_type, tuple_type, vector_type, alignable_store, surface_source_link, bounds_source_link>;
 
     typed_detector d(detector_name);
@@ -296,7 +294,8 @@ namespace detray
         if (c_volume != nullptr and not surface_transform_storage.empty())
         {
           // Construction with move semantics
-          c_volume->add_surface_transforms(surface_default_context, std::move(surface_transform_storage));
+          //c_volume->add_surface_transforms(surface_default_context, std::move(surface_transform_storage));
+          d.add_surface_transforms(surface_default_context, *c_volume, std::move(surface_transform_storage));
           c_volume->add_surface_components(std::move(c_surfaces), std::move(c_masks));
 
           // Get new clean containers
@@ -356,8 +355,6 @@ namespace detray
         vector3 t{io_surface.cx, io_surface.cy, io_surface.cz};
         vector3 x{io_surface.rot_xu, io_surface.rot_yu, io_surface.rot_zu};
         vector3 z{io_surface.rot_xw, io_surface.rot_yw, io_surface.rot_zw};
-        dindex transform_index = surface_transform_storage.size();
-        surface_transform_storage.push_back(transform3{t, z, x});
 
         // Translate the mask & add it to the mask container
         unsigned int bounds_type = io_surface.bounds_type;
@@ -435,6 +432,8 @@ namespace detray
         // Fill the surface into the temporary container
         if (mask_index[0] != dindex_invalid)
         {
+          dindex transform_index = surface_transform_storage.size();
+          surface_transform_storage.push_back(transform3{t, z, x});
           c_surfaces.push_back({transform_index, mask_index, c_volume->index(), io_surface.geometry_id});
         }
 
@@ -487,7 +486,7 @@ namespace detray
     // - run the bin association
     for (auto [iv, v] : enumerate(d.volumes()))
     {
-      // Get the volume bounds for fillind
+      // Get the volume bounds for filling
       const auto &v_bounds = v.bounds();
 
       dindex irl = v_grid.axis_p0().bin(v_bounds[0] + stepsilon);

@@ -72,10 +72,11 @@ namespace __plugin
         point3 ori = {0., 0., 0.};
 
         using detray_context = decltype(d)::transform_store::context;
+        detray_context default_context;
 
         for (auto _ : state)
         {
-            track<static_transform_store<>::context> track;
+            track<detray_context> track;
             track.pos = point3{0., 0., 0.};
 
             // Loops of theta values
@@ -102,7 +103,7 @@ namespace __plugin
                         // Loop over surfaces
                         for (const auto &s : surfaces.objects())
                         {
-                            auto sfi_surface = intersect(track, s, surfaces.transforms(), surfaces.masks());
+                            auto sfi_surface = intersect(track, s, surfaces.transforms(default_context), surfaces.masks());
 
                             const auto &sfi = std::get<0>(sfi_surface);
                             

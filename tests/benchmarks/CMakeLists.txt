@@ -6,7 +6,7 @@ add_subdirectory("${PROJECT_SOURCE_DIR}/extern/benchmark" "extern/benchmark")
 
 macro(add_detray_benchmark TESTNAME FILES PLUGIN_LIBRARY)
     add_executable(${TESTNAME} ${FILES})
-    target_link_libraries(${TESTNAME} benchmark detray::core detray::tests_common detray::io ${PLUGIN_LIBRARY})
+    target_link_libraries(${TESTNAME} benchmark detray::core detray::tests_common detray::io vecmem::core ${PLUGIN_LIBRARY})
     install(TARGETS ${TESTNAME} RUNTIME DESTINATION bin)
 endmacro()
 

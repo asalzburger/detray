@@ -7,11 +7,15 @@
 
 #include <dfe/dfe_namedtuple.hpp>
 #include <dfe/dfe_io_dsv.hpp>
+#include <vecmem/containers/vector.hpp>
 
 #include <fstream>
 
 namespace detray
 {
+
+  template<typename T>
+  using vecm_vector = vecmem::vector<T>;
 
   struct csv_surface
   {
